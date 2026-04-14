@@ -1,14 +1,17 @@
 id: tirzepatide_hfpef_acm
-title: Tirzepatide in HFpEF (all-cause mortality)
+title: Tirzepatide in HFpEF and obesity (CV death or worsening HF composite)
 population: Adults with heart failure with preserved ejection fraction and obesity (BMI >= 30)
 intervention: Tirzepatide
 comparator: Placebo
-outcome: All-cause mortality
+outcome: Composite of CV death or worsening HF event (SUMMIT primary endpoint)
 outcome_type: binary
 decision_threshold: 1.0
 notes: |
-  Reference trial: SUMMIT (Packer et al 2025, NEJM). HF-event benefit present
-  but ACM HR reported non-significant (verify exact value against Packer 2025
-  primary paper before release). Tension-bearing PICO; expected high flip
-  probability because pipeline includes ongoing trials designed for ACM.
+  Reference trial: SUMMIT (Packer et al 2025, NEJM, doi:10.1056/NEJMoa2410027).
+  NCT04847557. n=731 (364 tirz / 367 placebo), median follow-up 104 weeks.
+  Primary composite HR 0.62 (95% CI 0.41-0.95, p=0.026). 36 vs 56 events.
+  CV death alone numerically higher on tirz (HR 1.58, 0.52-4.83, ns; 8 vs 5
+  events) — this is the tension source for the flip-probability forecast.
+  Earlier YAML slug (`_acm`) retained for compatibility; outcome corrected to
+  the published primary endpoint after source verification 2026-04-14.
   NARRATIVE CENTERPIECE of the Nature Medicine paper.

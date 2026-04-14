@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "sglt2i_hfpef",
-  "generated_utc": "2026-04-14T15:44:33.319945+00:00",
+  "generated_utc": "2026-04-14T16:06:30.738412+00:00",
   "effect": {
     "point": 0.8069276476676667,
     "ci_low": 0.45838521698653206,
@@ -28,9 +28,9 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "aaf79a0a6d963d4e816b450c89d89bcd2e7eb201fc103981066b418cbc725cfd",
-    "hmac_sha256": "fedff794133b5b71b2a08e7dc7379fc8e18e505d8f3975a72264e9155b36270b",
-    "signed_utc": "2026-04-14T15:44:33.320200+00:00",
+    "sha256": "519256a8b710007add6711c024ea51d8072be7ea7ca8c77b2ff6be8e4f6c0e7e",
+    "hmac_sha256": "816655708e4b60be6f837109f22d85abf44cb20fbcdc8d42db688332336ecc31",
+    "signed_utc": "2026-04-14T16:06:30.739569+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_dev_mode": {
@@ -39,6 +39,6 @@
     "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
     "aact_source": "fixture subset \u2014 canonical extract integration pending",
     "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T15:44:33.320214+00:00"
+    "bootstrap_utc": "2026-04-14T16:06:30.739589+00:00"
   }
 }

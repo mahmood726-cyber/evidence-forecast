@@ -1,15 +1,15 @@
 pico_id: tirzepatide_hfpef_acm
-outcome: All-cause mortality
+outcome: Composite of CV death or worsening HF event (SUMMIT primary endpoint)
 scale: HR
-source: SUMMIT trial (Packer et al 2025, NEJM)
+source: SUMMIT (Packer et al, NEJM 2025; doi 10.1056/NEJMoa2410027; PMID 39555826)
 notes: |
-  Single-trial PICO. ACM HR non-significant; exact point + CI pending
-  verification against the primary publication (see PICO YAML note).
-  Values below are placeholders to match the memory-sourced HR 1.245 with
-  a wide CI — must be replaced before publication.
+  Single-trial PICO. Values verified 2026-04-14 against the NEJM primary
+  publication: HR 0.62 (95% CI 0.41-0.95, p=0.026). 36 vs 56 events;
+  n=731 (364 tirz / 367 placebo), median follow-up 104 weeks. NCT04847557.
+  Memory-sourced HR 1.245 was incorrect and has been replaced.
 studies:
-  - label: SUMMIT (tirzepatide, 2025)
+  - label: SUMMIT (tirzepatide, Packer NEJM 2025)
     scale: HR
-    effect: 1.245
-    ci_low: 0.77
-    ci_high: 2.01
+    effect: 0.62
+    ci_low: 0.41
+    ci_high: 0.95
