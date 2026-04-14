@@ -6,6 +6,8 @@ comparator: Placebo or usual care
 outcome: Composite of cardiovascular death or first heart failure hospitalisation
 outcome_type: binary
 decision_threshold: 1.0
+match_intervention: sglt2
+match_condition: heart failure
 notes: |
   Reference MA: Vaduganathan et al 2022 (Lancet). Mature, stable effect;
   expected low flip probability — Phase-1 sanity anchor.

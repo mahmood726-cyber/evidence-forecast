@@ -111,15 +111,17 @@ def main() -> int:
     write_validation_report(cardio_report, models_dir / "validation_report_v1_cardiology.json")
     print(f"      synthetic cardiology AUC={cardio_report.auc:.3f} n={cardio_report.n_test}")
 
+    real_aact = ROOT / "cache" / "aact_joined_2026-04-12.csv"
     fixture_aact = ROOT / "tests" / "fixtures" / "aact_mini.csv"
-    print(f"[2/3] Using fixture AACT at {fixture_aact}")
+    aact_path = real_aact if real_aact.exists() else fixture_aact
+    print(f"[2/3] Using AACT at {aact_path} ({'real canonical join' if aact_path == real_aact else 'fixture subset'})")
 
     print("[3/3] Generating trio cards...")
     native_pool = NativePoolBackend()
     for pico_name in ["sglt2i_hfpef", "tirzepatide_hfpef_acm", "empareg_t2dm"]:
         pico = load_pico(ROOT / "configs" / "picos" / f"{pico_name}.yaml")
         effect = compute_effect(pico, backend=native_pool)
-        pl = extract_pipeline(pico, snapshot_date="2026-04-14", aact_path=fixture_aact)
+        pl = extract_pipeline(pico, snapshot_date="2026-04-14", aact_path=aact_path)
         rep = compute_representativeness({}, {})
         features = _features_for_pico(effect, pl)
         flip = predict_flip(features, model_path=artifacts.gbm_path, bootstrap_n=200, seed=0)

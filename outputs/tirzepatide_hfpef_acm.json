@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "tirzepatide_hfpef_acm",
-  "generated_utc": "2026-04-14T16:06:30.974117+00:00",
+  "generated_utc": "2026-04-14T16:17:23.731631+00:00",
   "effect": {
     "point": 0.62,
     "ci_low": 0.4073069449057075,
@@ -14,12 +14,12 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.6790479624164037,
-    "ci_low": 0.030609231669616845,
-    "ci_high": 0.7863321298488699,
+    "probability": 0.8642686087450038,
+    "ci_low": 0.05098698928967017,
+    "ci_high": 0.9369748864477421,
     "horizon_months": 24,
     "model_version": "1.0.0",
-    "pipeline_empty": true
+    "pipeline_empty": false
   },
   "representativeness": {
     "overlap_score": 0.0,
@@ -28,9 +28,9 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "9fe7cd3a03b270218b690b86b6e4627850778f7ada324bd98591686b13d1fa39",
-    "hmac_sha256": "c1420f6df0263a5827b9b8394959b2eadb43e71eaa8c7c3d31bbb1eee2af8298",
-    "signed_utc": "2026-04-14T16:06:30.974299+00:00",
+    "sha256": "3ed0891032b7ed03123a91c5b12f5b765cc9607bcb17af07e9c43a7540716320",
+    "hmac_sha256": "d8b90537b7c4448e74b472d7ac28e218ad95bccf0595b6b5b7edae862278db76",
+    "signed_utc": "2026-04-14T16:17:23.731809+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_dev_mode": {
@@ -39,6 +39,6 @@
     "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
     "aact_source": "fixture subset \u2014 canonical extract integration pending",
     "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T16:06:30.974316+00:00"
+    "bootstrap_utc": "2026-04-14T16:17:23.731821+00:00"
   }
 }

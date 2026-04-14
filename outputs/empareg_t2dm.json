@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "empareg_t2dm",
-  "generated_utc": "2026-04-14T16:06:31.176814+00:00",
+  "generated_utc": "2026-04-14T16:17:29.095814+00:00",
   "effect": {
     "point": 0.86,
     "ci_low": 0.743526948558237,
@@ -14,12 +14,12 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.6944588812727394,
-    "ci_low": 0.20861288119396884,
-    "ci_high": 0.7761464116975525,
+    "probability": 0.9754786821651892,
+    "ci_low": 0.8965255970939686,
+    "ci_high": 0.9936803937932603,
     "horizon_months": 24,
     "model_version": "1.0.0",
-    "pipeline_empty": true
+    "pipeline_empty": false
   },
   "representativeness": {
     "overlap_score": 0.0,
@@ -28,9 +28,9 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "86e44ce8c877f33a31b45c13e45d6b5efc30b93edb771db18a769ebed1a87bba",
-    "hmac_sha256": "a89563dcb5f3c5ee9e599349f73dd32a2b2293b4a44f82bc2a857724696c1200",
-    "signed_utc": "2026-04-14T16:06:31.176927+00:00",
+    "sha256": "9b0e6af7fe3ff1cee79a382d38daa00ad3fd21e89b837ef346640e271de9544c",
+    "hmac_sha256": "d625fcb8ecea435d5a342cfd3431dcd7f1a582eb056989fbed5cd0b739f13968",
+    "signed_utc": "2026-04-14T16:17:29.095965+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_dev_mode": {
@@ -39,6 +39,6 @@
     "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
     "aact_source": "fixture subset \u2014 canonical extract integration pending",
     "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T16:06:31.176937+00:00"
+    "bootstrap_utc": "2026-04-14T16:17:29.095975+00:00"
   }
 }

@@ -6,6 +6,8 @@ comparator: Placebo
 outcome: 3-point MACE (CV death, non-fatal MI, non-fatal stroke)
 outcome_type: binary
 decision_threshold: 1.0
+match_intervention: empagliflozin
+match_condition: diabetes
 notes: |
   Reference trial: EMPA-REG OUTCOME (Zinman et al 2015, NEJM). Mature, large,
   well-replicated. Calibration benchmark; expected very low flip probability.

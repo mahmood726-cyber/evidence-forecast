@@ -42,13 +42,11 @@ def extract_pipeline(
     df = pd.read_csv(aact_path)
     snap = date.fromisoformat(snapshot_date)
 
+    iv_term = getattr(pico, "match_intervention", None) or _primary_token(pico.intervention)
+    cd_term = getattr(pico, "match_condition", None) or _primary_token(pico.population)
     matches = df[
-        df["interventions"].fillna("").str.lower().str.contains(
-            _primary_token(pico.intervention), na=False
-        )
-        & df["conditions"].fillna("").str.lower().str.contains(
-            _primary_token(pico.population), na=False
-        )
+        df["interventions"].fillna("").str.lower().str.contains(iv_term.lower(), na=False, regex=False)
+        & df["conditions"].fillna("").str.lower().str.contains(cd_term.lower(), na=False, regex=False)
         & df["overall_status"].isin(_ONGOING_STATUSES)
         & (pd.to_datetime(df["start_date"], errors="coerce").dt.date <= snap)
         & (pd.to_datetime(df["completion_date"], errors="coerce").dt.date > snap)

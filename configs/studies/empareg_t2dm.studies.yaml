@@ -1,11 +1,16 @@
 pico_id: empareg_t2dm
 outcome: 3-point MACE (CV death, non-fatal MI, non-fatal stroke)
 scale: HR
-source: EMPA-REG OUTCOME (Zinman et al 2015, NEJM)
+source: |
+  Zinman et al, NEJM 2015 (PMID 26378978; doi 10.1056/NEJMoa1504720).
+  EMPA-REG OUTCOME. NCT01131676. n=7,020 (pooled empagliflozin vs placebo).
+  Verified 2026-04-14 via PubMed + CT.gov.
 notes: |
   Single-trial PICO. Pivotal CVOT for empagliflozin.
+  Primary composite (3p-MACE): 10.5% vs 12.1%, HR 0.86 (95% CI 0.74-0.99),
+  P=0.04 superiority. All-cause mortality also reduced (5.7% vs 8.3%, P<0.001).
 studies:
-  - label: EMPA-REG OUTCOME (empagliflozin, 2015)
+  - label: EMPA-REG OUTCOME (empagliflozin, Zinman NEJM 2015)
     scale: HR
     effect: 0.86
     ci_low: 0.74

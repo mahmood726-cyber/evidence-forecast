@@ -24,6 +24,8 @@ class PICO:
     outcome: str
     outcome_type: str
     decision_threshold: float
+    match_intervention: str | None = None  # optional AACT match term
+    match_condition: str | None = None     # optional AACT match term
 
 
 def load_pico(path: Path) -> PICO:
@@ -46,4 +48,6 @@ def load_pico(path: Path) -> PICO:
         outcome=str(data["outcome"]),
         outcome_type=str(data["outcome_type"]),
         decision_threshold=float(data["decision_threshold"]),
+        match_intervention=str(data["match_intervention"]) if data.get("match_intervention") else None,
+        match_condition=str(data["match_condition"]) if data.get("match_condition") else None,
     )

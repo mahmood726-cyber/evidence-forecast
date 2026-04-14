@@ -10,3 +10,4 @@ outputs/
 PROGRESS.md
 *.egg-info/
 .env
+cache/

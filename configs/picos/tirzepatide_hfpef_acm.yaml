@@ -6,6 +6,8 @@ comparator: Placebo
 outcome: Composite of CV death or worsening HF event (SUMMIT primary endpoint)
 outcome_type: binary
 decision_threshold: 1.0
+match_intervention: tirzepatide
+match_condition: heart failure
 notes: |
   Reference trial: SUMMIT (Packer et al 2025, NEJM, doi:10.1056/NEJMoa2410027).
   NCT04847557. n=731 (364 tirz / 367 placebo), median follow-up 104 weeks.
