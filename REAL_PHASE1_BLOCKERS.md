@@ -18,23 +18,26 @@ The plan at `C:\Users\user\docs\superpowers\plans\2026-04-14-evidence-forecast-p
 
 **Recommended**: option 2. Native pooling is a well-defined ~150 LoC module with R/metafor validation tests available via `advanced-stats.md` rules. Decouples Evidence Forecast from a UI that evolves independently.
 
-## Blocker 2: No multi-version pair dataset exists on disk
+## Blocker 2: Real multi-version pair dataset is n=6 (seed only)
 
-**Plan assumed**: `C:\MetaAudit\outputs\pairs.csv` with columns `ma_id, v1_date, v2_date, outcome, v1_point, v1_ci_low, v1_ci_high, v2_point, v2_ci_low, v2_ci_high, topic_area, scale`.
+**Plan assumed**: `C:\MetaAudit\outputs\pairs.csv` with ~1,500–2,500 pairs.
 
-**Reality**: MetaAudit audited **one pub per review** — 473 unique review-pub combinations in `C:\MetaAudit\results\audit_results.csv`, with **zero reviews having ≥2 pub versions captured**. `ma_id` format is `CD######_pubN_data__A#` and each review appears with its single latest pub only.
+**Reality after investigation**: MetaAudit audited one pub per review (473 unique review-pubs, zero multi-version). Pairwise70 has 595 `.rda` files covering 591 unique reviews × 1 pub each plus **4 reviews with 2 pubs each**. These 4 multi-pub reviews yielded **6 real pair rows** after pooling each analysis via metafor DL random-effects (`scripts/extract_cochrane_pairs.R`, fixture at `tests/fixtures/real_cochrane_pairs_v0.csv`).
 
-Related data found:
-- `C:\Projects\Pairwise70\analysis\ma4_results_pairwise70.csv`: 5,089 rows, 85 unique reviews, each at a single pub version. Rich effect-size fields (`theta, ci_std_lo, ci_std_hi, tau2, I2`) but not longitudinal.
-- `audit_results.csv`: 68,520 audit-module findings. No effect sizes.
+All 6 real pairs are flip=0 in the current seed — useful as sanity anchors for the contract (verified by `tests/test_real_cochrane_pairs.py`), but insufficient for training a real flip-forecaster.
 
-**Resolution options**:
-1. **Acquire Cochrane historical versions**: Cochrane's CDSR API returns prior review versions with their effect sizes. Requires authenticated access. A scraper over the Cochrane website is fragile and likely ToS-problematic.
-2. **Use retractions / conclusion-change datasets**: `C:\Users\user\retraction-gravity\`, `C:\Users\user\evidence-collapsar\`, and `C:\Models\MetaShift\` may contain longitudinal conclusion-change records. Investigate before building from scratch.
-3. **Synthesise pairs from simulation**: generate plausible v1 effect + CI + pipeline features, simulate v2 after trial arrival, label flip. Weakens the paper to "if reality matches these simulation assumptions" but is fast.
-4. **Refocus the paper** on the primitive itself (architecture + flip-label contract + pipeline-feature family + cryptographic attestation) and defer empirical calibration to a follow-up once longitudinal data is acquired. This is the most honest path for Phase 1.
+No other candidate data sources found on disk:
+- `retraction-gravity`, `evidence-collapsar`: speculative simulation tools, not longitudinal MA data.
+- `MetaShift`: not present on disk (memory pointer stale).
+- `Pairwise70/analysis/ma4_results_pairwise70.csv`: 85 unique reviews at single-pub each.
 
-**Recommended**: option 4 as the immediate Phase-1 completion path; option 2 investigation in parallel as a candidate data source for the empirical Phase-1.5.
+**Resolution options** (increasing effort / payoff):
+1. **Synthetic-but-grounded pair generator**: use Pairwise70's `ma_summary.csv` distributions (85 real MAs × tau² × I²) to simulate plausible v1→v2 trajectories with realistic flip rates. Train on ~1,000 synthetic pairs; external-validate on the 6 real pairs. Weakens the paper to "if reality matches these simulation assumptions" but is shippable in Phase-1.
+2. **Cochrane CDSR API acquisition**: requires Wiley institutional access. Pulls historical review versions with effect sizes. 2–4 days to scaffold and validate.
+3. **Manual curation from published updates**: read ~200 Cochrane PDFs with multiple versions, extract effect-size changes by hand. Weeks of work.
+4. **Refocus the paper as primitive + 6-pair retrospective case study**: honest BMJ Analysis / J Clin Epidemiol paper — "here's the flip-forecast primitive; here's how it would have scored these 6 real retrospective updates." Does not require external data. Smaller venue than Nature Med, shippable now.
+
+**Recommended** (as of 2026-04-14): option 4 for immediate shipping; option 1 for Phase-1.5; option 2 if institutional access materialises.
 
 ## What already works (no blocker)
 
