@@ -43,6 +43,13 @@ def build_features_from_pairs(pairs_csv: Path) -> pd.DataFrame:
     raw = pd.read_csv(pairs_csv)
     aux_cols = ["ma_id", "v1_k", "v1_tau2", "v1_i2",
                 "v1_year_span", "v1_years_since_recent", "v1_annual_accrual"]
+    # If the enriched CSV is being used, also pull the real pipeline columns.
+    enriched_cols = ["pipeline_trial_count", "pipeline_expected_n",
+                     "pipeline_sponsor_entropy", "pipeline_design_het",
+                     "pipeline_empty"]
+    has_enriched = all(c in raw.columns for c in enriched_cols)
+    if has_enriched:
+        aux_cols = aux_cols + enriched_cols
     merged = labelled.merge(
         raw[aux_cols].drop_duplicates("ma_id"),
         on="ma_id", how="left", suffixes=("", "_dup"),
@@ -65,11 +72,22 @@ def build_features_from_pairs(pairs_csv: Path) -> pd.DataFrame:
     merged["egger_p"] = 0.5
     merged["trim_fill_delta"] = 0.0
     merged["benford_mad"] = 0.01
-    merged["pipeline_trial_count"] = 0
-    merged["pipeline_expected_n"] = 0
-    merged["pipeline_sponsor_entropy"] = 0.0
-    merged["pipeline_design_het"] = 0.0
-    merged["pipeline_empty"] = True
+    # Pipeline features: use real AACT-derived values if present, else constants.
+    if not has_enriched:
+        merged["pipeline_trial_count"] = 0
+        merged["pipeline_expected_n"] = 0
+        merged["pipeline_sponsor_entropy"] = 0.0
+        merged["pipeline_design_het"] = 0.0
+        merged["pipeline_empty"] = True
+    else:
+        for col, default in [
+            ("pipeline_trial_count", 0),
+            ("pipeline_expected_n", 0),
+            ("pipeline_sponsor_entropy", 0.0),
+            ("pipeline_design_het", 0.0),
+            ("pipeline_empty", True),
+        ]:
+            merged[col] = merged[col].fillna(default)
 
     # v1-intrinsic temporal features already in merged from aux_cols above.
     # Median-fill any missing values.
@@ -81,7 +99,10 @@ def build_features_from_pairs(pairs_csv: Path) -> pd.DataFrame:
 
 
 def main() -> int:
-    pairs_csv = ROOT / "tests" / "fixtures" / "temporal_cochrane_pairs_v0.csv"
+    # Prefer the AACT-enriched pair CSV if it exists; fall back to the base.
+    enriched = ROOT / "cache" / "temporal_cochrane_pairs_enriched.csv"
+    base = ROOT / "tests" / "fixtures" / "temporal_cochrane_pairs_v0.csv"
+    pairs_csv = enriched if enriched.exists() else base
     models_dir = ROOT / "models"
     models_dir.mkdir(exist_ok=True)
 
@@ -154,26 +175,38 @@ def main() -> int:
     print(f"      permutation AUC mean {np.mean(perm_aucs):.3f} "
           f"(should be near 0.50)")
 
-    print("[6/6] Temporal-features ablation (drop v1_year_span/years_since/annual_accrual)")
-    ablated_cols = [c for c in FEATURE_COLS
-                    if c not in {"v1_year_span", "v1_years_since_recent", "v1_annual_accrual"}]
-    X_tr_ab = train[ablated_cols].apply(pd.to_numeric, errors="coerce").values
-    ab_cal = CalibratedClassifierCV(
-        Pipeline([("imputer", SimpleImputer(strategy="median")),
-                  ("scaler", StandardScaler()),
-                  ("clf", clone(base_clf))]),
-        method="sigmoid", cv=5,
-    )
-    ab_cal.fit(X_tr_ab, y_tr)
-    X_te_ab = test[ablated_cols].apply(pd.to_numeric, errors="coerce").values
-    ab_p = ab_cal.predict_proba(X_te_ab)[:, 1]
+    print("[6/6] Ablation: pipeline-features family delta-AUC")
     from sklearn.metrics import brier_score_loss
-    ab_auc = roc_auc_score(y, ab_p)
-    ab_brier = brier_score_loss(y, ab_p)
-    delta_auc = cal_report.auc - ab_auc
-    print(f"      full:    AUC {cal_report.auc:.3f}  Brier {cal_report.brier:.3f}")
-    print(f"      ablated: AUC {ab_auc:.3f}  Brier {ab_brier:.3f}")
-    print(f"      delta-AUC temporal family contribution: {delta_auc:+.3f}")
+
+    def _ablate(drop_cols: set, label: str) -> tuple[float, float]:
+        keep = [c for c in FEATURE_COLS if c not in drop_cols]
+        X_tr = train[keep].apply(pd.to_numeric, errors="coerce").values
+        X_te = test[keep].apply(pd.to_numeric, errors="coerce").values
+        cl = CalibratedClassifierCV(
+            Pipeline([("imputer", SimpleImputer(strategy="median")),
+                      ("scaler", StandardScaler()),
+                      ("clf", clone(base_clf))]),
+            method="sigmoid", cv=5,
+        )
+        cl.fit(X_tr, y_tr)
+        p_i = cl.predict_proba(X_te)[:, 1]
+        auc_i = roc_auc_score(y, p_i)
+        brier_i = brier_score_loss(y, p_i)
+        print(f"      {label:30s} AUC {auc_i:.3f}  Brier {brier_i:.3f}")
+        return auc_i, brier_i
+
+    full_auc = cal_report.auc
+    pipeline_cols = {"pipeline_trial_count", "pipeline_expected_n",
+                     "pipeline_sponsor_entropy", "pipeline_design_het",
+                     "pipeline_empty"}
+    temporal_cols = {"v1_year_span", "v1_years_since_recent", "v1_annual_accrual"}
+    print(f"      {'full (all features)':30s} AUC {full_auc:.3f}  Brier {cal_report.brier:.3f}")
+    ab_pipe_auc, _ = _ablate(pipeline_cols, "ablated: no pipeline")
+    ab_temp_auc, _ = _ablate(temporal_cols, "ablated: no temporal")
+    ab_both_auc, _ = _ablate(pipeline_cols | temporal_cols, "ablated: neither family")
+    print(f"      delta-AUC pipeline family:    {full_auc - ab_pipe_auc:+.3f}")
+    print(f"      delta-AUC temporal family:    {full_auc - ab_temp_auc:+.3f}")
+    print(f"      delta-AUC both families:      {full_auc - ab_both_auc:+.3f}")
 
     print("Done. Calibrated model at", artifacts.gbm_path)
     return 0

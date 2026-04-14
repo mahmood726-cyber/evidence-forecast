@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "sglt2i_hfpef",
-  "generated_utc": "2026-04-14T21:56:32.244875+00:00",
+  "generated_utc": "2026-04-14T22:55:36.178537+00:00",
   "effect": {
     "point": 0.8069276476676667,
     "ci_low": 0.45838521698653206,
@@ -14,9 +14,9 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.056345996578306703,
-    "ci_low": 0.05275820351219481,
-    "ci_high": 0.0933763544742273,
+    "probability": 0.054608171473068845,
+    "ci_low": 0.051365973457754587,
+    "ci_high": 0.09272406186107852,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": false
@@ -28,9 +28,9 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "4af5c98e50bba5bca8060a36e69659548d4f419235cda0644dca7430e29f3ad9",
-    "hmac_sha256": "7da12fa35569cd755adb2a485456dcf3a09f7ec2be0ecafe2e352f0374abab1a",
-    "signed_utc": "2026-04-14T21:56:32.245257+00:00",
+    "sha256": "b113fa5935fa0d8d0373d691c7626b586e9f779fed01f843501dc308696629e3",
+    "hmac_sha256": "7dc5938045ae8f1dbe66e5f4acd45c63cba711c36734e820cb7e6eadda41d8c7",
+    "signed_utc": "2026-04-14T22:55:36.178742+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_model_provenance": {
@@ -48,6 +48,6 @@
     "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
     "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
     "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
-    "regenerated_utc": "2026-04-14T21:56:32.245277+00:00"
+    "regenerated_utc": "2026-04-14T22:55:36.178752+00:00"
   }
 }

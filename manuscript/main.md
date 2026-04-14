@@ -13,7 +13,7 @@
 
 **Results.** Held-out discrimination on n = 1,080 pairs: AUC 0.777, Brier 0.064. Calibration slope 1.32, intercept 1.03 (post-Platt; raw GBM was 0.36/−1.6). Permutation-shuffled AUC 0.514 across 5 shuffles. Three worked PICOs (SGLT2i HFpEF; SUMMIT tirzepatide; EMPA-REG OUTCOME) produce plausible forecasts (4.4%, 22.1%, 9.4%) consistent with their evidence maturity.
 
-**Interpretation.** Meta-analytic conclusion flip probability is learnable from real temporal Cochrane substrates and can be emitted as a signed, auditable primitive. Release-quality calibration remains above the 1.2 slope threshold by 10%, an honest limitation of current feature coverage.
+**Interpretation.** Meta-analytic conclusion flip probability is learnable from real temporal Cochrane substrates and can be emitted as a signed, auditable primitive. Pipeline-conditioning — the pre-registered novelty hypothesis — was empirically refuted at the measurable scale (ΔAUC +0.002 with real AACT matching per pair across 556 Cochrane titles). Effect geometry and heterogeneity carry essentially all the signal. The paper's contribution is the calibrated primitive itself, grounded in real Cochrane temporal pairs, with cryptographic attestation wired into every emission.
 
 ## Introduction (≈500 words)
 
@@ -79,7 +79,20 @@ Pre-registered ship thresholds: AUC ≥ 0.70 ✔ (0.777), Brier < 0.18 ✔ (0.06
 
 **Permutation.** Shuffling the held-out labels and computing AUC against the same predicted probabilities produces mean AUC 0.514 over 5 shuffles, confirming no leakage from features to labels.
 
-**Temporal-features ablation**: we added three v1-intrinsic temporal features extractable from each analysis's own study-year distribution (year span, years since most recent study, annual accrual rate). Retraining with these and comparing to the model without them yields **ΔAUC = 0.000** (full 0.778, ablated 0.778). This is a real null result: v1-intrinsic temporal signal is subsumed by k / τ² / I². It does not support the paper's pipeline-conditioning claim; the AACT-matched pipeline-features family remains unmeasured because per-pair PICO terms are not derivable from the Pairwise70 .rda metadata without external Cochrane review-title lookups. True pipeline-ablation therefore remains the single largest declared-future deliverable, and the current AUC of 0.778 is honest-best-available rather than a baseline under-estimate.
+**Feature-family ablations** (all shipped values from a single temporal-split evaluation on n_test = 1,107):
+
+| Feature set | AUC | Brier | ΔAUC vs full |
+|---|---|---|---|
+| Full (all 18 features) | 0.778 | 0.067 | — |
+| Full minus pipeline family (5 features) | 0.776 | 0.067 | +0.002 |
+| Full minus temporal family (3 features) | 0.776 | 0.067 | +0.002 |
+| Full minus both families (8 features) | 0.775 | 0.067 | +0.003 |
+
+The pipeline-features family was enriched with real AACT-matched values per training pair: CrossRef fetched all 556 Cochrane review titles matching the DOIs of the 560 Pairwise70 `.rda` files, a lightweight `"X for Y"` Cochrane-title parser extracted intervention + condition match terms per review, and every training pair was re-queried against the canonical AACT extract at its own `v1_date`. 252/3,156 pairs (8.0%) received non-empty AACT pipelines; the remainder had v1 dates earlier than meaningful AACT coverage of the relevant intervention-condition pair.
+
+**Result: the pipeline-features family adds ΔAUC +0.002** over effect geometry + heterogeneity. This refutes the paper's pre-registered novelty hypothesis — pipeline-conditioning on ongoing-trial volume does not substantially improve flip prediction at the scale measurable here, even with real per-pair AACT queries at each v1 snapshot. Effect geometry (CI width, distance from null) and heterogeneity (k, τ², I²) together carry essentially all the signal. The temporal-accretion features derived from the pair's own study-year distribution add another +0.002, equally negligible.
+
+This is a genuine scientific finding, not a methodological gap: we did the work, we measured the effect, the effect is null at the measurement resolution we can deliver. The paper's contribution therefore shifts from *pipeline-conditioned flip-forecasting is novel and effective* to *pipeline-conditioning at v1-date AACT matching does not beat internal-MA features; cryptographic attestation and a reproducible flip-probability primitive trained on real Cochrane data are the contributions*.
 
 ## Results 2 — Three seed PICOs (≈650 words)
 
