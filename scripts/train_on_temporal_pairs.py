@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from evidence_forecast.calibration.label_flips import label_flips
-from evidence_forecast.calibration.train import train_models
+from evidence_forecast.calibration.train import train_models, split_temporal, _feature_cols
 from evidence_forecast.calibration.validate import validate_model, write_validation_report
 
 
@@ -87,27 +87,64 @@ def main() -> int:
     )
     print(f"      shipped: {artifacts.gbm_path.name}")
 
-    print("[3/4] Validating on held-out (v1 >= 2015)")
+    print("[3/5] Validating raw GBM on held-out (v1 >= 2015)")
     with open(artifacts.gbm_path, "rb") as f:
         bundle = pickle.load(f)
     report = validate_model(bundle, feats, cutoff="2015-01-01", holdout_topic=None)
     write_validation_report(report, models_dir / "validation_report_temporal.json")
-    print(f"      AUC {report.auc:.3f}  Brier {report.brier:.3f}  "
+    print(f"      raw AUC {report.auc:.3f}  Brier {report.brier:.3f}  "
           f"slope {report.calibration_slope:.2f}  n_test {report.n_test}")
 
-    print("[4/4] Permutation sanity check (5 shuffles)")
+    print("[4/5] Applying post-hoc Platt scaling (sigmoid calibration on train)")
+    from sklearn.calibration import CalibratedClassifierCV
+    from sklearn.base import clone
+    train, _ = split_temporal(feats, cutoff="2015-01-01", holdout_topic=None)
+    X_tr = train[FEATURE_COLS].apply(pd.to_numeric, errors="coerce").values
+    y_tr = train["flip"].astype(int).values
+    # Wrap the un-fit pipeline in prefit calibration via CalibratedClassifierCV cv=5
+    from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import StandardScaler
+    try:
+        from xgboost import XGBClassifier
+        base_clf = XGBClassifier(
+            n_estimators=300, max_depth=4, learning_rate=0.05,
+            subsample=0.8, colsample_bytree=0.8,
+            random_state=0, eval_metric="logloss", tree_method="hist",
+        )
+    except ImportError:
+        from sklearn.ensemble import GradientBoostingClassifier
+        base_clf = GradientBoostingClassifier(
+            n_estimators=300, max_depth=4, learning_rate=0.05,
+            subsample=0.8, random_state=0,
+        )
+    base_pipeline = Pipeline([
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler()),
+        ("clf", base_clf),
+    ])
+    cal = CalibratedClassifierCV(base_pipeline, method="sigmoid", cv=5)
+    cal.fit(X_tr, y_tr)
+    cal_bundle = {"pipeline": cal, "features": FEATURE_COLS, "schema_version": "1.0.0"}
+    with open(artifacts.gbm_path, "wb") as f:
+        pickle.dump(cal_bundle, f)
+    cal_report = validate_model(cal_bundle, feats, cutoff="2015-01-01", holdout_topic=None)
+    write_validation_report(cal_report, models_dir / "validation_report_temporal_calibrated.json")
+    print(f"      calibrated AUC {cal_report.auc:.3f}  Brier {cal_report.brier:.3f}  "
+          f"slope {cal_report.calibration_slope:.2f}  intercept {cal_report.calibration_intercept:.2f}")
+
+    print("[5/5] Permutation sanity check (5 shuffles on calibrated model)")
     from sklearn.metrics import roc_auc_score
-    from evidence_forecast.calibration.train import split_temporal
     _, test = split_temporal(feats, cutoff="2015-01-01", holdout_topic=None)
     X = test[FEATURE_COLS].apply(pd.to_numeric, errors="coerce").values
     y = test["flip"].values
-    p = bundle["pipeline"].predict_proba(X)[:, 1]
+    p = cal_bundle["pipeline"].predict_proba(X)[:, 1]
     rng = np.random.default_rng(0)
     perm_aucs = [roc_auc_score(rng.permutation(y), p) for _ in range(5)]
     print(f"      permutation AUC mean {np.mean(perm_aucs):.3f} "
           f"(should be near 0.50)")
 
-    print("Done. Model at", artifacts.gbm_path)
+    print("Done. Calibrated model at", artifacts.gbm_path)
     return 0
 
 

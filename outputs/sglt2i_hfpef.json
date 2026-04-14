@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "sglt2i_hfpef",
-  "generated_utc": "2026-04-14T16:47:48.601177+00:00",
+  "generated_utc": "2026-04-14T20:34:51.212531+00:00",
   "effect": {
     "point": 0.8069276476676667,
     "ci_low": 0.45838521698653206,
@@ -14,9 +14,9 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.0020084080914095468,
-    "ci_low": 0.0011976951645336965,
-    "ci_high": 0.01238668915842165,
+    "probability": 0.044221598610917824,
+    "ci_low": 0.0431240861909008,
+    "ci_high": 0.0880562364388681,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": false
@@ -28,19 +28,26 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "8180992f60696c5af790dd66ee4d2e7fef8c95436497a965dd9b782c8404d7be",
-    "hmac_sha256": "13d3b34f4e62b1cf57f248ae566b573e5d353025d51751f5a45f897c34b23a8a",
-    "signed_utc": "2026-04-14T16:47:48.601430+00:00",
+    "sha256": "fc8561096bb8a12ae236d82a84234d6b608a04aed62004466bd1e67b793bb415",
+    "hmac_sha256": "05dcc32b525c31bba9a2d5a07059817c0e8ccc3a9d06f826bbe9f9da6872eb54",
+    "signed_utc": "2026-04-14T20:34:51.212878+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_model_provenance": {
     "trained_on": "temporal_cochrane_pairs_v0.csv (1,632 real Cochrane pairs from Pairwise70)",
-    "method": "GBM, temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
-    "held_out_metrics": "AUC 0.784, Brier 0.071, calibration_slope 0.36, n_test 1080",
+    "method": "GBM + sigmoid Platt calibration via CalibratedClassifierCV(cv=5); temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
+    "held_out_metrics": {
+      "auc": 0.777,
+      "brier": 0.064,
+      "calibration_slope": 1.32,
+      "calibration_intercept": 1.03,
+      "n_test": 1080,
+      "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] near-miss (1.32)"
+    },
     "permutation_AUC": 0.514,
     "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
     "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
     "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
-    "regenerated_utc": "2026-04-14T16:47:48.601441+00:00"
+    "regenerated_utc": "2026-04-14T20:34:51.212894+00:00"
   }
 }

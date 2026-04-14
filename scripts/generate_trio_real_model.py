@@ -65,8 +65,14 @@ def main() -> int:
         card = assemble_card(pico.id, effect, flip, rep)
         card["_model_provenance"] = {
             "trained_on": "temporal_cochrane_pairs_v0.csv (1,632 real Cochrane pairs from Pairwise70)",
-            "method": "GBM, temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
-            "held_out_metrics": "AUC 0.784, Brier 0.071, calibration_slope 0.36, n_test 1080",
+            "method": "GBM + sigmoid Platt calibration via CalibratedClassifierCV(cv=5); "
+                      "temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
+            "held_out_metrics": {
+                "auc": 0.777, "brier": 0.064,
+                "calibration_slope": 1.32, "calibration_intercept": 1.03,
+                "n_test": 1080,
+                "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] near-miss (1.32)",
+            },
             "permutation_AUC": 0.514,
             "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
             "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
