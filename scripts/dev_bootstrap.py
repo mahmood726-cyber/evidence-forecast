@@ -27,43 +27,12 @@ sys.path.insert(0, str(ROOT))
 from evidence_forecast.calibration.train import train_models
 from evidence_forecast.calibration.validate import validate_model, write_validation_report
 from evidence_forecast.pico_spec import load_pico
-from evidence_forecast.effect_layer import compute_effect, EffectBackend
+from evidence_forecast.effect_layer import compute_effect
+from evidence_forecast._native_pool import NativePoolBackend
 from evidence_forecast.pipeline_layer import extract_pipeline
 from evidence_forecast.representativeness import compute_representativeness
 from evidence_forecast.flip_forecaster import predict_flip
 from evidence_forecast.forecast_card import assemble_card, render_html
-
-
-# Per-PICO stub effect values anchored to published primary MAs.
-# Real Task 17 replaces these with CardioSynth live pooling.
-_STUB_EFFECTS = {
-    "sglt2i_hfpef": dict(  # Vaduganathan 2022, Lancet — pooled across DELIVER + EMPEROR-Preserved
-        point=0.80, ci_low=0.73, ci_high=0.87,
-        pi_low=0.65, pi_high=0.98,
-        k=5, tau2=0.002, i2=0.11, scale="HR",
-    ),
-    "tirzepatide_hfpef_acm": dict(  # SUMMIT Packer 2025 — tirzepatide HFpEF ACM, non-sig
-        # NOTE: exact HR pending source verification (see PICO YAML note)
-        point=0.89, ci_low=0.60, ci_high=1.32,
-        pi_low=0.50, pi_high=1.60,
-        k=1, tau2=0.00, i2=0.00, scale="HR",
-    ),
-    "empareg_t2dm": dict(  # Zinman 2015, EMPA-REG — 3-point MACE
-        point=0.86, ci_low=0.74, ci_high=0.99,
-        pi_low=0.70, pi_high=1.06,
-        k=1, tau2=0.00, i2=0.00, scale="HR",
-    ),
-}
-
-
-class _AnchoredStubBackend(EffectBackend):
-    def __init__(self, pico_id: str):
-        self._pico_id = pico_id
-
-    def pool(self, pico):
-        if pico.id not in _STUB_EFFECTS:
-            raise KeyError(f"no stub effect anchor for {pico.id}")
-        return dict(_STUB_EFFECTS[pico.id])
 
 
 def _synthetic_training_df(n: int = 600, seed: int = 0) -> pd.DataFrame:
@@ -146,18 +115,19 @@ def main() -> int:
     print(f"[2/3] Using fixture AACT at {fixture_aact}")
 
     print("[3/3] Generating trio cards...")
+    native_pool = NativePoolBackend()
     for pico_name in ["sglt2i_hfpef", "tirzepatide_hfpef_acm", "empareg_t2dm"]:
         pico = load_pico(ROOT / "configs" / "picos" / f"{pico_name}.yaml")
-        effect = compute_effect(pico, backend=_AnchoredStubBackend(pico_name))
+        effect = compute_effect(pico, backend=native_pool)
         pl = extract_pipeline(pico, snapshot_date="2026-04-14", aact_path=fixture_aact)
         rep = compute_representativeness({}, {})
         features = _features_for_pico(effect, pl)
         flip = predict_flip(features, model_path=artifacts.gbm_path, bootstrap_n=200, seed=0)
         card = assemble_card(pico.id, effect, flip, rep)
         card["_dev_mode"] = {
-            "status": "dev-mode artifact",
-            "effect_source": "stub anchored to published primary MA — CardioSynth integration pending",
-            "model_training": "synthetic data — MetaAudit-trained model pending",
+            "status": "dev-mode artifact (native pool; synthetic flip model)",
+            "effect_source": "native DL+HKSJ pool over hand-curated studies in configs/studies/*.studies.yaml",
+            "model_training": "synthetic data — real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
             "aact_source": "fixture subset — canonical extract integration pending",
             "representativeness": "empty — registry-first population layer integration pending",
             "bootstrap_utc": datetime.now(timezone.utc).isoformat(),

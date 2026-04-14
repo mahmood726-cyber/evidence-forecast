@@ -1,0 +1,12 @@
+pico_id: empareg_t2dm
+outcome: 3-point MACE (CV death, non-fatal MI, non-fatal stroke)
+scale: HR
+source: EMPA-REG OUTCOME (Zinman et al 2015, NEJM)
+notes: |
+  Single-trial PICO. Pivotal CVOT for empagliflozin.
+studies:
+  - label: EMPA-REG OUTCOME (empagliflozin, 2015)
+    scale: HR
+    effect: 0.86
+    ci_low: 0.74
+    ci_high: 0.99

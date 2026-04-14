@@ -1,22 +1,22 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "empareg_t2dm",
-  "generated_utc": "2026-04-14T15:25:59.497470+00:00",
+  "generated_utc": "2026-04-14T15:44:34.227470+00:00",
   "effect": {
     "point": 0.86,
-    "ci_low": 0.74,
-    "ci_high": 0.99,
-    "pi_low": 0.7,
-    "pi_high": 1.06,
+    "ci_low": 0.743526948558237,
+    "ci_high": 0.9947184852333171,
+    "pi_low": 0.743526948558237,
+    "pi_high": 0.9947184852333171,
     "k": 1,
     "tau2": 0.0,
     "i2": 0.0,
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.695365774265687,
-    "ci_low": 0.2333147123290101,
-    "ci_high": 0.7894882790587248,
+    "probability": 0.6944588812727394,
+    "ci_low": 0.20861288119396884,
+    "ci_high": 0.7761464116975525,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": true
@@ -28,17 +28,17 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "4e18ff4cbe4b79c4d9978d8d618bbfe5c0a35e02cc5cb5d85547394c0861442e",
-    "hmac_sha256": "69ddbbf5af62cdb8a1d6223e2c93a43bf60b9516788a0f850975e06e9df6b753",
-    "signed_utc": "2026-04-14T15:25:59.497568+00:00",
+    "sha256": "9cc90f63847dcecbe4af4663ebf25e9ee2ed635fadd52638341d86f36323110e",
+    "hmac_sha256": "fbc684ba92dd394f5a661d39783586ceba71a2fad5a5c2943aab565d98dcb9d0",
+    "signed_utc": "2026-04-14T15:44:34.227688+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_dev_mode": {
-    "status": "dev-mode artifact",
-    "effect_source": "stub anchored to published primary MA \u2014 CardioSynth integration pending",
-    "model_training": "synthetic data \u2014 MetaAudit-trained model pending",
+    "status": "dev-mode artifact (native pool; synthetic flip model)",
+    "effect_source": "native DL+HKSJ pool over hand-curated studies in configs/studies/*.studies.yaml",
+    "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
     "aact_source": "fixture subset \u2014 canonical extract integration pending",
     "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T15:25:59.497577+00:00"
+    "bootstrap_utc": "2026-04-14T15:44:34.227709+00:00"
   }
 }

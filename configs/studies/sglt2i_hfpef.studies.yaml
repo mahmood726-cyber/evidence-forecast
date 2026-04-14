@@ -1,0 +1,19 @@
+pico_id: sglt2i_hfpef
+outcome: Composite of cardiovascular death or first heart failure hospitalisation
+scale: HR
+source: Vaduganathan et al 2022 (Lancet) pooled DELIVER + EMPEROR-Preserved
+notes: |
+  Hand-curated from the two pivotal HFpEF SGLT2i trials. Both reported HR with
+  95% CI for the primary composite. Pooled via native DL + HKSJ random-effects
+  in evidence_forecast._native_pool.
+studies:
+  - label: DELIVER (dapagliflozin, 2022)
+    scale: HR
+    effect: 0.82
+    ci_low: 0.73
+    ci_high: 0.92
+  - label: EMPEROR-Preserved (empagliflozin, 2021)
+    scale: HR
+    effect: 0.79
+    ci_low: 0.69
+    ci_high: 0.90

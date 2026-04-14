@@ -56,5 +56,7 @@ def compute_effect(pico: PICO, backend: EffectBackend | None = None) -> EffectRe
 
 
 def _default_backend() -> EffectBackend:
-    from evidence_forecast._cardiosynth_adapter import CardioSynthBackend
-    return CardioSynthBackend()
+    # Native Python pool replaces the never-existent CardioSynth Python API.
+    # See REAL_PHASE1_BLOCKERS.md for why the original plan's adapter was abandoned.
+    from evidence_forecast._native_pool import NativePoolBackend
+    return NativePoolBackend()

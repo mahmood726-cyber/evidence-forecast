@@ -1,22 +1,22 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "tirzepatide_hfpef_acm",
-  "generated_utc": "2026-04-14T15:25:59.343264+00:00",
+  "generated_utc": "2026-04-14T15:44:33.755072+00:00",
   "effect": {
-    "point": 0.89,
-    "ci_low": 0.6,
-    "ci_high": 1.32,
-    "pi_low": 0.5,
-    "pi_high": 1.6,
+    "point": 1.245,
+    "ci_low": 0.7705781411653144,
+    "ci_high": 2.011509173691275,
+    "pi_low": 0.7705781411653144,
+    "pi_high": 2.011509173691275,
     "k": 1,
     "tau2": 0.0,
     "i2": 0.0,
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.737589549504485,
-    "ci_low": 0.17119960197980696,
-    "ci_high": 0.8157653925110318,
+    "probability": 0.8608873585834471,
+    "ci_low": 0.22902237999173064,
+    "ci_high": 0.9024615045159269,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": true
@@ -28,17 +28,17 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "80c373bf969a986f040c31152449e68381ac92f974e3b04c96c0c7d5778e919e",
-    "hmac_sha256": "0509064b9768ff393889fd84ca83c58d8b0557c04be978a896bc8628b48bce3d",
-    "signed_utc": "2026-04-14T15:25:59.343367+00:00",
+    "sha256": "7d6ff9367fa37eae508510145c8c6ea9a39a85a14fbdde21ab645ccfb341c21a",
+    "hmac_sha256": "b792df6dd4ccfa2742dc495ce7dcd1221285dbaec23ddc09332b2e7b328d2ee5",
+    "signed_utc": "2026-04-14T15:44:33.755319+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_dev_mode": {
-    "status": "dev-mode artifact",
-    "effect_source": "stub anchored to published primary MA \u2014 CardioSynth integration pending",
-    "model_training": "synthetic data \u2014 MetaAudit-trained model pending",
+    "status": "dev-mode artifact (native pool; synthetic flip model)",
+    "effect_source": "native DL+HKSJ pool over hand-curated studies in configs/studies/*.studies.yaml",
+    "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
     "aact_source": "fixture subset \u2014 canonical extract integration pending",
     "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T15:25:59.343376+00:00"
+    "bootstrap_utc": "2026-04-14T15:44:33.755343+00:00"
   }
 }
