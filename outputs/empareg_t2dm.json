@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "empareg_t2dm",
-  "generated_utc": "2026-04-14T16:17:29.095814+00:00",
+  "generated_utc": "2026-04-14T16:48:11.870007+00:00",
   "effect": {
     "point": 0.86,
     "ci_low": 0.743526948558237,
@@ -14,9 +14,9 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.9754786821651892,
-    "ci_low": 0.8965255970939686,
-    "ci_high": 0.9936803937932603,
+    "probability": 0.04927267023780746,
+    "ci_low": 0.0005060301066218048,
+    "ci_high": 0.03439938481107113,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": false
@@ -28,17 +28,19 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "9b0e6af7fe3ff1cee79a382d38daa00ad3fd21e89b837ef346640e271de9544c",
-    "hmac_sha256": "d625fcb8ecea435d5a342cfd3431dcd7f1a582eb056989fbed5cd0b739f13968",
-    "signed_utc": "2026-04-14T16:17:29.095965+00:00",
+    "sha256": "7e0b11c488ea1114b5e8442d7a7c44a559208f03335b4812b5d02975f3c185c4",
+    "hmac_sha256": "33b8c613350cead0c0f9d0e31f69858fd0ce33485a3929a506f42022fb6aeed7",
+    "signed_utc": "2026-04-14T16:48:11.870363+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
-  "_dev_mode": {
-    "status": "dev-mode artifact (native pool; synthetic flip model)",
-    "effect_source": "native DL+HKSJ pool over hand-curated studies in configs/studies/*.studies.yaml",
-    "model_training": "synthetic data \u2014 real MetaAudit version-pair dataset still blocked (see REAL_PHASE1_BLOCKERS.md)",
-    "aact_source": "fixture subset \u2014 canonical extract integration pending",
-    "representativeness": "empty \u2014 registry-first population layer integration pending",
-    "bootstrap_utc": "2026-04-14T16:17:29.095975+00:00"
+  "_model_provenance": {
+    "trained_on": "temporal_cochrane_pairs_v0.csv (1,632 real Cochrane pairs from Pairwise70)",
+    "method": "GBM, temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
+    "held_out_metrics": "AUC 0.784, Brier 0.071, calibration_slope 0.36, n_test 1080",
+    "permutation_AUC": 0.514,
+    "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
+    "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
+    "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
+    "regenerated_utc": "2026-04-14T16:48:11.870388+00:00"
   }
 }
