@@ -1,0 +1,9 @@
+ma_id,v1_date,v2_date,outcome,v1_point,v1_ci_low,v1_ci_high,v2_point,v2_ci_low,v2_ci_high,topic_area,scale
+MA001,2018-06-01,2020-12-01,Mortality,0.85,0.72,1.01,0.81,0.70,0.94,cardiology,HR
+MA002,2019-03-01,2021-09-01,Mortality,0.92,0.81,1.05,0.95,0.88,1.03,respiratory,HR
+MA003,2018-01-01,2020-01-01,Mortality,0.78,0.65,0.94,0.89,0.76,1.04,oncology,HR
+MA004,2020-05-01,2021-08-01,Mortality,0.80,0.70,0.92,0.82,0.74,0.91,cardiology,HR
+MA005,2017-06-01,2020-07-01,Mortality,1.05,0.92,1.21,1.18,1.04,1.34,gi,HR
+MA006,2019-01-01,2019-04-01,Mortality,0.90,0.80,1.01,0.91,0.82,1.02,neurology,HR
+MA007,2018-01-01,2023-06-01,Mortality,0.95,0.85,1.05,0.97,0.88,1.07,cardiology,HR
+MA008,2018-01-01,2020-06-01,Mortality,,0.85,1.05,0.90,0.82,1.00,cardiology,HR
