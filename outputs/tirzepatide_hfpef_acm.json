@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "tirzepatide_hfpef_acm",
-  "generated_utc": "2026-04-14T20:35:08.639531+00:00",
+  "generated_utc": "2026-04-14T21:56:47.345428+00:00",
   "effect": {
     "point": 0.62,
     "ci_low": 0.4073069449057075,
@@ -14,9 +14,9 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.22076220359652154,
-    "ci_low": 0.17159135918686308,
-    "ci_high": 0.37512043454213184,
+    "probability": 0.21381412682496861,
+    "ci_low": 0.1749674211147627,
+    "ci_high": 0.315613335489652,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": false
@@ -28,9 +28,9 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "e3c9702733a6a87aed05f0af2062b4a3d173042b617426e028e79644def6a0b1",
-    "hmac_sha256": "919768cd912b7ffdfbc53ea2cdfea9a6efedd16c187db195b57fbd0abadb55e0",
-    "signed_utc": "2026-04-14T20:35:08.639814+00:00",
+    "sha256": "a4737ca6dd70af9cee82e08582cbf962026325f499044ed6cb3abf4acc509fc3",
+    "hmac_sha256": "0c6cb9d4b755880bb15d437e59f067f26c75852610223c3ec1a4c70d440a85df",
+    "signed_utc": "2026-04-14T21:56:47.345611+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_model_provenance": {
@@ -48,6 +48,6 @@
     "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
     "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
     "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
-    "regenerated_utc": "2026-04-14T20:35:08.639836+00:00"
+    "regenerated_utc": "2026-04-14T21:56:47.345626+00:00"
   }
 }

@@ -79,7 +79,7 @@ Pre-registered ship thresholds: AUC ≥ 0.70 ✔ (0.777), Brier < 0.18 ✔ (0.06
 
 **Permutation.** Shuffling the held-out labels and computing AUC against the same predicted probabilities produces mean AUC 0.514 over 5 shuffles, confirming no leakage from features to labels.
 
-**Pipeline-ablation ΔAUC**: not yet measured. The declared novelty claim of this paper — that pipeline conditioning adds signal beyond MA-internal features — cannot be supported until per-pair AACT enrichment is wired; current AUC of 0.777 is therefore a *lower bound* reflecting only effect geometry and heterogeneity. The follow-up will report full-feature AUC and quantify pipeline contribution.
+**Temporal-features ablation**: we added three v1-intrinsic temporal features extractable from each analysis's own study-year distribution (year span, years since most recent study, annual accrual rate). Retraining with these and comparing to the model without them yields **ΔAUC = 0.000** (full 0.778, ablated 0.778). This is a real null result: v1-intrinsic temporal signal is subsumed by k / τ² / I². It does not support the paper's pipeline-conditioning claim; the AACT-matched pipeline-features family remains unmeasured because per-pair PICO terms are not derivable from the Pairwise70 .rda metadata without external Cochrane review-title lookups. True pipeline-ablation therefore remains the single largest declared-future deliverable, and the current AUC of 0.778 is honest-best-available rather than a baseline under-estimate.
 
 ## Results 2 — Three seed PICOs (≈650 words)
 

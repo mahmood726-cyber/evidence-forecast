@@ -68,6 +68,8 @@ for (f in files) {
   if (!all(c("Analysis.number", "Analysis.name", "Study.year") %in% colnames(x))) next
   for (anum in unique(x$Analysis.number)) {
     sub <- x[x$Analysis.number == anum & !is.na(x$Study.year), ]
+    sub$Study.year <- suppressWarnings(as.integer(as.character(sub$Study.year)))
+    sub <- sub[!is.na(sub$Study.year), ]
     if (nrow(sub) < 4) next
     outcome_name <- sub$Analysis.name[1]
     years <- sort(unique(sub$Study.year))
@@ -79,6 +81,12 @@ for (f in files) {
     v1 <- sub[sub$Study.year <= cut1, ]
     v2 <- sub[sub$Study.year <= cut2, ]
     if (nrow(v1) < 2 || nrow(v2) < nrow(v1) + 1) next
+    # v1-intrinsic temporal features (pipeline-lite without AACT matching)
+    v1_year_min <- min(v1$Study.year)
+    v1_year_max <- max(v1$Study.year)
+    v1_year_span <- as.integer(v1_year_max - v1_year_min)
+    v1_years_since_recent <- as.integer(as.integer(cut1) - v1_year_max)
+    v1_annual_accrual <- if (v1_year_span > 0) nrow(v1) / v1_year_span else nrow(v1)
     p1 <- pool_studies(v1); p2 <- pool_studies(v2)
     if (is.null(p1) || is.null(p2)) next
     if (p1$scale != p2$scale) next
@@ -103,6 +111,9 @@ for (f in files) {
       v1_k      = p1$k,
       v1_tau2   = p1$tau2,
       v1_i2     = p1$i2,
+      v1_year_span = v1_year_span,
+      v1_years_since_recent = v1_years_since_recent,
+      v1_annual_accrual = v1_annual_accrual,
       stringsAsFactors = FALSE
     )
   }

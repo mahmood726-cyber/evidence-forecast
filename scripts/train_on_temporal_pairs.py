@@ -32,14 +32,19 @@ FEATURE_COLS = [
     "fragility_index", "egger_p", "trim_fill_delta", "benford_mad",
     "pipeline_trial_count", "pipeline_expected_n",
     "pipeline_sponsor_entropy", "pipeline_design_het", "pipeline_empty",
+    # v1-intrinsic temporal features (pipeline-lite): derived per-pair from the
+    # analysis's own study-year distribution. See extract_temporal_pairs.R.
+    "v1_year_span", "v1_years_since_recent", "v1_annual_accrual",
 ]
 
 
 def build_features_from_pairs(pairs_csv: Path) -> pd.DataFrame:
     labelled = label_flips(pairs_csv)
     raw = pd.read_csv(pairs_csv)
+    aux_cols = ["ma_id", "v1_k", "v1_tau2", "v1_i2",
+                "v1_year_span", "v1_years_since_recent", "v1_annual_accrual"]
     merged = labelled.merge(
-        raw[["ma_id", "v1_k", "v1_tau2", "v1_i2"]].drop_duplicates("ma_id"),
+        raw[aux_cols].drop_duplicates("ma_id"),
         on="ma_id", how="left", suffixes=("", "_dup"),
     )
 
@@ -65,6 +70,11 @@ def build_features_from_pairs(pairs_csv: Path) -> pd.DataFrame:
     merged["pipeline_sponsor_entropy"] = 0.0
     merged["pipeline_design_het"] = 0.0
     merged["pipeline_empty"] = True
+
+    # v1-intrinsic temporal features already in merged from aux_cols above.
+    # Median-fill any missing values.
+    for col in ["v1_year_span", "v1_years_since_recent", "v1_annual_accrual"]:
+        merged[col] = merged[col].fillna(merged[col].median())
 
     keep = ["ma_id", "flip", "topic_area", "v1_date"] + FEATURE_COLS
     return merged[keep].copy()
@@ -133,7 +143,7 @@ def main() -> int:
     print(f"      calibrated AUC {cal_report.auc:.3f}  Brier {cal_report.brier:.3f}  "
           f"slope {cal_report.calibration_slope:.2f}  intercept {cal_report.calibration_intercept:.2f}")
 
-    print("[5/5] Permutation sanity check (5 shuffles on calibrated model)")
+    print("[5/6] Permutation sanity check (5 shuffles on calibrated model)")
     from sklearn.metrics import roc_auc_score
     _, test = split_temporal(feats, cutoff="2015-01-01", holdout_topic=None)
     X = test[FEATURE_COLS].apply(pd.to_numeric, errors="coerce").values
@@ -143,6 +153,27 @@ def main() -> int:
     perm_aucs = [roc_auc_score(rng.permutation(y), p) for _ in range(5)]
     print(f"      permutation AUC mean {np.mean(perm_aucs):.3f} "
           f"(should be near 0.50)")
+
+    print("[6/6] Temporal-features ablation (drop v1_year_span/years_since/annual_accrual)")
+    ablated_cols = [c for c in FEATURE_COLS
+                    if c not in {"v1_year_span", "v1_years_since_recent", "v1_annual_accrual"}]
+    X_tr_ab = train[ablated_cols].apply(pd.to_numeric, errors="coerce").values
+    ab_cal = CalibratedClassifierCV(
+        Pipeline([("imputer", SimpleImputer(strategy="median")),
+                  ("scaler", StandardScaler()),
+                  ("clf", clone(base_clf))]),
+        method="sigmoid", cv=5,
+    )
+    ab_cal.fit(X_tr_ab, y_tr)
+    X_te_ab = test[ablated_cols].apply(pd.to_numeric, errors="coerce").values
+    ab_p = ab_cal.predict_proba(X_te_ab)[:, 1]
+    from sklearn.metrics import brier_score_loss
+    ab_auc = roc_auc_score(y, ab_p)
+    ab_brier = brier_score_loss(y, ab_p)
+    delta_auc = cal_report.auc - ab_auc
+    print(f"      full:    AUC {cal_report.auc:.3f}  Brier {cal_report.brier:.3f}")
+    print(f"      ablated: AUC {ab_auc:.3f}  Brier {ab_brier:.3f}")
+    print(f"      delta-AUC temporal family contribution: {delta_auc:+.3f}")
 
     print("Done. Calibrated model at", artifacts.gbm_path)
     return 0

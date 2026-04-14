@@ -60,6 +60,11 @@ def main() -> int:
             pipeline_sponsor_entropy=pl.sponsor_entropy,
             pipeline_design_het=pl.design_heterogeneity,
             pipeline_empty=pl.pipeline_empty,
+            # v1-intrinsic temporal features: production PICOs don't have
+            # study-year distributions on disk; use training-set medians.
+            v1_year_span=10.0,
+            v1_years_since_recent=0.0,
+            v1_annual_accrual=0.833,
         )
         flip = predict_flip(features, model_path=model_path, bootstrap_n=200, seed=0)
         card = assemble_card(pico.id, effect, flip, rep)

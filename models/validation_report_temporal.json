@@ -1,79 +1,79 @@
 {
-  "auc": 0.7843735605711654,
-  "brier": 0.07133377269282391,
-  "calibration_slope": 0.35762814711406976,
-  "calibration_intercept": -0.6191561410885033,
+  "auc": 0.7672133847891567,
+  "brier": 0.07305120467355267,
+  "calibration_slope": 0.384466355861573,
+  "calibration_intercept": -0.36574503955672194,
   "reliability_bins": [
     {
       "bin_low": 0.0,
       "bin_high": 0.1,
-      "predicted_mean": 0.007327665844938213,
-      "observed_mean": 0.0631786771964462,
-      "count": 1013
+      "predicted_mean": 0.006479742068128163,
+      "observed_mean": 0.06451612903225806,
+      "count": 1054
     },
     {
       "bin_low": 0.1,
       "bin_high": 0.2,
-      "predicted_mean": 0.14395100127848606,
-      "observed_mean": 0.08695652173913043,
-      "count": 23
+      "predicted_mean": 0.1392279677090483,
+      "observed_mean": 0.35714285714285715,
+      "count": 28
     },
     {
       "bin_low": 0.2,
       "bin_high": 0.30000000000000004,
-      "predicted_mean": 0.2500732487469445,
-      "observed_mean": 0.2,
+      "predicted_mean": 0.25591682699896373,
+      "observed_mean": 0.3,
       "count": 10
     },
     {
       "bin_low": 0.30000000000000004,
       "bin_high": 0.4,
-      "predicted_mean": 0.36140927557889857,
-      "observed_mean": 0.4,
-      "count": 15
+      "predicted_mean": 0.32858279937505924,
+      "observed_mean": 0.0,
+      "count": 3
     },
     {
       "bin_low": 0.4,
       "bin_high": 0.5,
-      "predicted_mean": 0.427211252032293,
+      "predicted_mean": 0.4379222503984387,
       "observed_mean": 0.5,
       "count": 4
     },
     {
       "bin_low": 0.5,
       "bin_high": 0.6000000000000001,
-      "predicted_mean": 0.5612214386817892,
-      "observed_mean": 0.3333333333333333,
+      "predicted_mean": 0.5273663764388277,
+      "observed_mean": 0.0,
       "count": 3
     },
     {
       "bin_low": 0.6000000000000001,
       "bin_high": 0.7000000000000001,
-      "predicted_mean": 0.6382236257530451,
-      "observed_mean": 0.2,
-      "count": 5
+      "predicted_mean": 0.6306323769877068,
+      "observed_mean": 0.0,
+      "count": 3
     },
     {
       "bin_low": 0.7000000000000001,
       "bin_high": 0.8,
-      "predicted_mean": 0.7633130253385325,
-      "observed_mean": 0.0,
-      "count": 5
+      "predicted_mean": null,
+      "observed_mean": null,
+      "count": 0
     },
     {
       "bin_low": 0.8,
       "bin_high": 0.9,
-      "predicted_mean": 0.8366968243081256,
+      "predicted_mean": 0.8354297113312089,
       "observed_mean": 0.0,
-      "count": 2
+      "count": 1
     },
     {
       "bin_low": 0.9,
       "bin_high": 1.0,
-      "predicted_mean": null,
-      "observed_mean": null,
-      "count": 0
+      "predicted_mean": 0.940392730695607,
+      "observed_mean": 0.0,
+      "count": 1
     }
   ],
-  "n_test": 1080
+  "n_test": 1107
 }
