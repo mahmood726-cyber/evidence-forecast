@@ -24,10 +24,30 @@ from evidence_forecast.flip_forecaster import predict_flip
 from evidence_forecast.forecast_card import assemble_card, render_html
 
 
+_AACT_CANDIDATES = (
+    ROOT / "cache" / "aact_joined_2026-04-12.csv",
+    Path(r"D:\AACT\2026-04-12\studies.txt"),
+    Path(r"C:\Users\user\AACT\2026-04-12\studies.txt"),
+)
+
+
+def _default_aact_path() -> str:
+    import os
+    env = os.environ.get("AACT_PATH")
+    if env:
+        return env
+    for cand in _AACT_CANDIDATES:
+        if cand.exists():
+            return str(cand)
+    return str(_AACT_CANDIDATES[0])  # cache path — run build_aact_cache.py first
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pico", required=True)
-    ap.add_argument("--aact", default=r"C:\Users\user\AACT\2026-04-12\studies.txt")
+    ap.add_argument("--aact", default=_default_aact_path(),
+                    help="AACT joined CSV or raw studies.txt. "
+                         "Defaults: AACT_PATH env, else local cache, else D: or C: candidates.")
     ap.add_argument("--model", default=str(ROOT / "models" / "flip_forecaster_v1.pkl"))
     ap.add_argument("--out", default=str(ROOT / "outputs"))
     ap.add_argument("--snapshot", default="2026-04-14")
