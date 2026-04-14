@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Evidence Forecast</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:720px;margin:3em auto;padding:0 1em;color:#222;}
+h1{border-bottom:2px solid #444;padding-bottom:.3em;}
+.dev{background:#fff3cd;border:1px solid #ffc107;padding:.8em 1em;border-radius:6px;color:#6d4c00;margin:1.5em 0;}
+a{color:#0a58ca;}
+ul.cards{list-style:none;padding:0;}
+ul.cards li{margin:.6em 0;padding:.8em 1em;border:1px solid #ddd;border-radius:6px;background:#fafafa;}
+.muted{color:#666;font-size:.9em;}
+</style></head>
+<body>
+<h1>Evidence Forecast — Phase 1</h1>
+<p>Probabilistic forecast of meta-analysis conclusion flips. Each card is a cryptographically signed JSON + HTML bundle containing: current pooled effect, P(flip within 24 months), burden-weighted representativeness, and TruthCert HMAC-SHA256 signature.</p>
+
+<div class="dev"><strong>DEV MODE.</strong> Cards below are generated from stub effects anchored to published primary MAs (Vaduganathan 2022, Packer 2025 SUMMIT, Zinman 2015 EMPA-REG) and a synthetic-data flip-forecaster. Real integration (CardioSynth adapter match + MetaAudit-trained model + registry-first population weights) is the user-present release step. See <a href="README.md">README</a> for the six steps to reach real Phase-1 release.</div>
+
+<h2>Trio forecast cards</h2>
+<ul class="cards">
+  <li><a href="outputs/sglt2i_hfpef.html">SGLT2i in HFpEF</a>
+    <div class="muted">Vaduganathan 2022 anchor · stability benchmark</div></li>
+  <li><a href="outputs/tirzepatide_hfpef_acm.html">Tirzepatide in HFpEF — all-cause mortality (SUMMIT)</a>
+    <div class="muted">Packer 2025 · narrative centerpiece · tension-bearing</div></li>
+  <li><a href="outputs/empareg_t2dm.html">Empagliflozin in T2DM CV outcomes (EMPA-REG)</a>
+    <div class="muted">Zinman 2015 · calibration benchmark</div></li>
+</ul>
+
+<h2>Artifacts</h2>
+<ul>
+  <li><a href="outputs/sglt2i_hfpef.json">sglt2i_hfpef.json</a> · <a href="outputs/tirzepatide_hfpef_acm.json">tirzepatide_hfpef_acm.json</a> · <a href="outputs/empareg_t2dm.json">empareg_t2dm.json</a> — signed JSON cards</li>
+  <li><a href="https://github.com/mahmood726-cyber/evidence-forecast">Source code</a> on GitHub</li>
+  <li><a href="manuscript/main.md">Manuscript draft</a> (Nature Medicine target)</li>
+</ul>
+
+<footer style="margin-top:3em;font-size:.8em;color:#777;border-top:1px solid #ddd;padding-top:.6em;">
+Mahmood Ahmad · Tahir Heart Institute · ORCID 0009-0003-7781-4478
+</footer>
+</body></html>
