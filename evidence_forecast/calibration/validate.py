@@ -27,8 +27,9 @@ def validate_model(
     cutoff: str = "2023-01-01",
     holdout_topic: str | None = "cardiology",
     seed: int = 0,
+    group_col: str | None = None,
 ) -> ValidationReport:
-    _, test = split_temporal(df, cutoff=cutoff, holdout_topic=None)
+    _, test = split_temporal(df, cutoff=cutoff, holdout_topic=None, group_col=group_col)
     # Holdout eval is on topic == holdout_topic if requested (cardiology gen eval)
     if holdout_topic:
         test = test[test["topic_area"] == holdout_topic].copy()

@@ -47,6 +47,24 @@ def test_temporal_split_respects_cutoff(synthetic_features):
     assert test["v1_date"].min() >= pd.Timestamp("2023-01-01")
 
 
+def test_group_split_no_ma_id_in_both(synthetic_features):
+    # P0-5 contract: when group_col='ma_id' is set, no ma_id may straddle.
+    df = synthetic_features.copy()
+    # Inject 5 reviews with multiple pairs straddling the cutoff.
+    extra_rows = []
+    for i in range(5):
+        ma = f"GROUP{i:03d}"
+        for date_str in ["2022-06-01", "2023-06-01", "2024-06-01"]:
+            r = df.iloc[0].to_dict()
+            r["ma_id"] = ma
+            r["v1_date"] = pd.Timestamp(date_str)
+            extra_rows.append(r)
+    df = pd.concat([df, pd.DataFrame(extra_rows)], ignore_index=True)
+    train, test = split_temporal(df, cutoff="2023-01-01", group_col="ma_id")
+    overlap = set(train["ma_id"]) & set(test["ma_id"])
+    assert overlap == set(), f"ma_id leaked across split: {overlap}"
+
+
 def test_cardiology_held_out_of_training(synthetic_features):
     train, test = split_temporal(
         synthetic_features, cutoff="2023-01-01", holdout_topic="cardiology"
