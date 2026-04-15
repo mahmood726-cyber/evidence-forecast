@@ -8,6 +8,7 @@ from a model trained on 1,632 real Cochrane temporal pairs.
 from __future__ import annotations
 
 import json
+import math
 import os
 import sys
 from datetime import datetime, timezone
@@ -44,6 +45,21 @@ def main() -> int:
     outputs_dir.mkdir(exist_ok=True)
     native_pool = NativePoolBackend()
 
+    # Load shipped-model provenance dynamically so it can't drift.
+    val_path = ROOT / "models" / "validation_report_temporal_calibrated.json"
+    val = json.loads(val_path.read_text())
+    ablation_path = ROOT / "models" / "ablation_report_temporal.json"
+    ablation = json.loads(ablation_path.read_text()) if ablation_path.exists() else None
+
+    def _distance_from_null(point: float, scale: str) -> float:
+        # Matches training feature computation (P0-4): log scale for ratios,
+        # natural scale for differences.
+        if scale in {"HR", "OR", "RR"}:
+            if point <= 0:
+                return float("nan")
+            return abs(math.log(point))
+        return abs(point)
+
     for pico_name in ["sglt2i_hfpef", "tirzepatide_hfpef_acm", "empareg_t2dm"]:
         pico = load_pico(ROOT / "configs" / "picos" / f"{pico_name}.yaml")
         effect = compute_effect(pico, backend=native_pool)
@@ -52,7 +68,7 @@ def main() -> int:
         features = dict(
             ci_width=effect.ci_high - effect.ci_low,
             pi_width=effect.pi_high - effect.pi_low,
-            distance_from_null=abs(effect.point - (1.0 if effect.scale in {"HR", "OR", "RR"} else 0.0)),
+            distance_from_null=_distance_from_null(effect.point, effect.scale),
             k=effect.k, tau2=effect.tau2, i2=effect.i2,
             fragility_index=0, egger_p=0.5, trim_fill_delta=0.0, benford_mad=0.01,
             pipeline_trial_count=pl.trial_count,
@@ -69,17 +85,26 @@ def main() -> int:
         flip = predict_flip(features, model_path=model_path, bootstrap_n=200, seed=0)
         card = assemble_card(pico.id, effect, flip, rep)
         card["_model_provenance"] = {
-            "trained_on": "temporal_cochrane_pairs_v0.csv (1,632 real Cochrane pairs from Pairwise70)",
+            "trained_on": "temporal_cochrane_pairs_enriched.csv (1,669 analysed pairs from 560 Pairwise70 .rda + 557 CrossRef titles; label-flips filter on 3,156 raw pairs)",
             "method": "GBM + sigmoid Platt calibration via CalibratedClassifierCV(cv=5); "
-                      "temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
+                      "group-aware temporal split by ma_id (median v1<2015 train / v1>=2015 test), "
+                      "no cardio holdout; word-boundary AACT matching",
             "held_out_metrics": {
-                "auc": 0.777, "brier": 0.064,
-                "calibration_slope": 1.32, "calibration_intercept": 1.03,
-                "n_test": 1080,
-                "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] near-miss (1.32)",
+                "auc": round(val["auc"], 4),
+                "brier": round(val["brier"], 4),
+                "calibration_slope": round(val["calibration_slope"], 3),
+                "calibration_intercept": round(val["calibration_intercept"], 3),
+                "n_test": val["n_test"],
+                "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] DECLARED DEVIATION",
             },
-            "permutation_AUC": 0.514,
-            "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
+            "pipeline_ablation": {
+                "delta_auc_mean": round(ablation["ablations"][0]["delta_auc_mean"], 5),
+                "delta_auc_ci_low": round(ablation["ablations"][0]["delta_auc_ci_low"], 5),
+                "delta_auc_ci_high": round(ablation["ablations"][0]["delta_auc_ci_high"], 5),
+                "n_bootstrap": ablation["n_bootstrap"],
+                "verdict": "null (CI brackets zero)",
+            } if ablation else None,
+            "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract with word-boundary matching; 188/3,156 pairs (6.0%) have non-empty pipeline at v1-date",
             "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
             "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
             "regenerated_utc": datetime.now(timezone.utc).isoformat(),

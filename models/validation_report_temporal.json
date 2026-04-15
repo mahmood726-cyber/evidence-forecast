@@ -1,57 +1,57 @@
 {
-  "auc": 0.7672133847891567,
-  "brier": 0.07305120467355267,
-  "calibration_slope": 0.384466355861573,
-  "calibration_intercept": -0.36574503955672194,
+  "auc": 0.752964984939759,
+  "brier": 0.07643078832426935,
+  "calibration_slope": 0.3076068386663198,
+  "calibration_intercept": -0.7552443387103087,
   "reliability_bins": [
     {
       "bin_low": 0.0,
       "bin_high": 0.1,
-      "predicted_mean": 0.006479742068128163,
-      "observed_mean": 0.06451612903225806,
-      "count": 1054
+      "predicted_mean": 0.006058290727423258,
+      "observed_mean": 0.06737247353224254,
+      "count": 1039
     },
     {
       "bin_low": 0.1,
       "bin_high": 0.2,
-      "predicted_mean": 0.1392279677090483,
-      "observed_mean": 0.35714285714285715,
-      "count": 28
+      "predicted_mean": 0.13385145682603608,
+      "observed_mean": 0.2571428571428571,
+      "count": 35
     },
     {
       "bin_low": 0.2,
       "bin_high": 0.30000000000000004,
-      "predicted_mean": 0.25591682699896373,
-      "observed_mean": 0.3,
-      "count": 10
+      "predicted_mean": 0.2491624359335958,
+      "observed_mean": 0.2727272727272727,
+      "count": 11
     },
     {
       "bin_low": 0.30000000000000004,
       "bin_high": 0.4,
-      "predicted_mean": 0.32858279937505924,
+      "predicted_mean": 0.3441737481767429,
       "observed_mean": 0.0,
-      "count": 3
+      "count": 6
     },
     {
       "bin_low": 0.4,
       "bin_high": 0.5,
-      "predicted_mean": 0.4379222503984387,
-      "observed_mean": 0.5,
+      "predicted_mean": 0.4404932835423221,
+      "observed_mean": 0.0,
       "count": 4
     },
     {
       "bin_low": 0.5,
       "bin_high": 0.6000000000000001,
-      "predicted_mean": 0.5273663764388277,
+      "predicted_mean": 0.5405291949636188,
       "observed_mean": 0.0,
-      "count": 3
+      "count": 2
     },
     {
       "bin_low": 0.6000000000000001,
       "bin_high": 0.7000000000000001,
-      "predicted_mean": 0.6306323769877068,
-      "observed_mean": 0.0,
-      "count": 3
+      "predicted_mean": 0.6541337726861808,
+      "observed_mean": 0.14285714285714285,
+      "count": 7
     },
     {
       "bin_low": 0.7000000000000001,
@@ -63,16 +63,16 @@
     {
       "bin_low": 0.8,
       "bin_high": 0.9,
-      "predicted_mean": 0.8354297113312089,
+      "predicted_mean": 0.8684877813041785,
       "observed_mean": 0.0,
       "count": 1
     },
     {
       "bin_low": 0.9,
       "bin_high": 1.0,
-      "predicted_mean": 0.940392730695607,
+      "predicted_mean": 0.9341766930021695,
       "observed_mean": 0.0,
-      "count": 1
+      "count": 2
     }
   ],
   "n_test": 1107

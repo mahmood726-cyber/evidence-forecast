@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "pico_id": "sglt2i_hfpef",
-  "generated_utc": "2026-04-14T22:55:36.178537+00:00",
+  "generated_utc": "2026-04-15T15:10:48.738400+00:00",
   "effect": {
     "point": 0.8069276476676667,
     "ci_low": 0.45838521698653206,
@@ -14,9 +14,9 @@
     "scale": "HR"
   },
   "flip": {
-    "probability": 0.054608171473068845,
-    "ci_low": 0.051365973457754587,
-    "ci_high": 0.09272406186107852,
+    "probability": 0.052610696005468784,
+    "ci_low": 0.05207363466500413,
+    "ci_high": 0.08512547886910536,
     "horizon_months": 24,
     "model_version": "1.0.0",
     "pipeline_empty": false
@@ -28,26 +28,32 @@
     "source": "none"
   },
   "truthcert": {
-    "sha256": "b113fa5935fa0d8d0373d691c7626b586e9f779fed01f843501dc308696629e3",
-    "hmac_sha256": "7dc5938045ae8f1dbe66e5f4acd45c63cba711c36734e820cb7e6eadda41d8c7",
-    "signed_utc": "2026-04-14T22:55:36.178742+00:00",
+    "sha256": "b0b3def7a764954fa1e3f4a432c469f1c034e03d98ab2f687faf914b048e4080",
+    "hmac_sha256": "0ec17e70cd086148393be1e8feb73fcf277e931c2f0d3c8d77e9ac766fec7884",
+    "signed_utc": "2026-04-15T15:10:48.738632+00:00",
     "key_source": "env:TRUTHCERT_HMAC_KEY"
   },
   "_model_provenance": {
-    "trained_on": "temporal_cochrane_pairs_v0.csv (1,632 real Cochrane pairs from Pairwise70)",
-    "method": "GBM + sigmoid Platt calibration via CalibratedClassifierCV(cv=5); temporal split v1<2015 train / v1>=2015 test, no cardio holdout",
+    "trained_on": "temporal_cochrane_pairs_enriched.csv (1,669 analysed pairs from 560 Pairwise70 .rda + 557 CrossRef titles; label-flips filter on 3,156 raw pairs)",
+    "method": "GBM + sigmoid Platt calibration via CalibratedClassifierCV(cv=5); group-aware temporal split by ma_id (median v1<2015 train / v1>=2015 test), no cardio holdout; word-boundary AACT matching",
     "held_out_metrics": {
-      "auc": 0.777,
-      "brier": 0.064,
-      "calibration_slope": 1.32,
-      "calibration_intercept": 1.03,
-      "n_test": 1080,
-      "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] near-miss (1.32)"
+      "auc": 0.772,
+      "brier": 0.0673,
+      "calibration_slope": 1.373,
+      "calibration_intercept": 1.214,
+      "n_test": 1107,
+      "ship_thresholds": "AUC>=0.70 PASS; Brier<0.18 PASS; slope in [0.8,1.2] DECLARED DEVIATION"
     },
-    "permutation_AUC": 0.514,
-    "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract",
+    "pipeline_ablation": {
+      "delta_auc_mean": 0.00073,
+      "delta_auc_ci_low": -0.00363,
+      "delta_auc_ci_high": 0.00517,
+      "n_bootstrap": 1000,
+      "verdict": "null (CI brackets zero)"
+    },
+    "pipeline_features_provenance": "real AACT 2026-04-12 canonical extract with word-boundary matching; 188/3,156 pairs (6.0%) have non-empty pipeline at v1-date",
     "effect_provenance": "native DL+HKSJ pool over source-verified study-level YAML",
     "flip_label_contract": "CI-crosses-null binary, horizon 24 months",
-    "regenerated_utc": "2026-04-14T22:55:36.178752+00:00"
+    "regenerated_utc": "2026-04-15T15:10:48.738658+00:00"
   }
 }
