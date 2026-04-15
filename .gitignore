@@ -11,3 +11,10 @@ PROGRESS.md
 *.egg-info/
 .env
 cache/
+
+# Sentinel pre-push hook artefacts (regenerated per push)
+STUCK_FAILURES.md
+STUCK_FAILURES.jsonl
+sentinel-findings.md
+sentinel-findings.jsonl
+review-findings.jsonl

@@ -24,6 +24,7 @@ import pandas as pd
 
 
 _CANDIDATE_ROOTS = (
+    r"D:\AACT-storage\AACT\2026-04-12",
     r"D:\AACT\2026-04-12",
     r"C:\Users\user\AACT\2026-04-12",
 )
