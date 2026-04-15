@@ -5,17 +5,22 @@ Usage:
 
 Requires env:
     TRUTHCERT_HMAC_KEY  (any non-empty string for dev; real HMAC key for release)
+
+AACT path resolution is delegated to evidence_forecast._aact_paths.discover_file
+(honours --aact CLI, then AACT_PATH env, then project cache, then candidates).
 """
 from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from evidence_forecast._aact_paths import discover_file as _discover_aact_file
 from evidence_forecast.pico_spec import load_pico
 from evidence_forecast.effect_layer import compute_effect
 from evidence_forecast.pipeline_layer import extract_pipeline
@@ -24,22 +29,19 @@ from evidence_forecast.flip_forecaster import predict_flip
 from evidence_forecast.forecast_card import assemble_card, render_html
 
 
-_AACT_CANDIDATES = (
-    ROOT / "cache" / "aact_joined_2026-04-12.csv",
-    Path(r"D:\AACT\2026-04-12\studies.txt"),
-    Path(r"C:\Users\user\AACT\2026-04-12\studies.txt"),
-)
-
-
 def _default_aact_path() -> str:
-    import os
-    env = os.environ.get("AACT_PATH")
-    if env:
-        return env
-    for cand in _AACT_CANDIDATES:
-        if cand.exists():
-            return str(cand)
-    return str(_AACT_CANDIDATES[0])  # cache path — run build_aact_cache.py first
+    return str(_discover_aact_file(
+        project_cache=ROOT / "cache" / "aact_joined_2026-04-12.csv",
+    ))
+
+
+def _distance_from_null(point: float, scale: str) -> float:
+    """Log-scale for ratio measures, natural-scale for differences (P0-4)."""
+    if scale in {"HR", "OR", "RR"}:
+        if point <= 0:
+            return float("nan")
+        return abs(math.log(point))
+    return abs(point)
 
 
 def main() -> int:
@@ -64,7 +66,7 @@ def main() -> int:
     features = dict(
         ci_width=effect.ci_high - effect.ci_low,
         pi_width=effect.pi_high - effect.pi_low,
-        distance_from_null=abs(effect.point - (1.0 if effect.scale in {"HR", "OR", "RR"} else 0.0)),
+        distance_from_null=_distance_from_null(effect.point, effect.scale),
         k=effect.k, tau2=effect.tau2, i2=effect.i2,
         fragility_index=0, egger_p=0.5, trim_fill_delta=0.0, benford_mad=0.01,
         pipeline_trial_count=pl.trial_count,

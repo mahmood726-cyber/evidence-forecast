@@ -1,11 +1,8 @@
 """One-time builder: joins AACT raw tables into a single CSV matching the
 schema that evidence_forecast.pipeline_layer.extract_pipeline expects.
 
-AACT root discovery (per lessons.md — no hardcoded drive):
-  1. --aact-root CLI flag
-  2. AACT_ROOT environment variable
-  3. Candidate roots: D:/AACT/2026-04-12, C:/Users/user/AACT/2026-04-12
-  4. Fail closed if none found.
+AACT root discovery: delegated to evidence_forecast._aact_paths.discover_root
+(respects --aact-root CLI, then AACT_ROOT env, then candidate roots).
 
 Columns emitted: nct_id, brief_title, overall_status, phase, study_type,
 primary_purpose, enrollment, start_date, completion_date, lead_sponsor,
@@ -16,34 +13,15 @@ Output is gitignored — this is a derived file reproducible from AACT raw.
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
 import pandas as pd
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
-_CANDIDATE_ROOTS = (
-    r"D:\AACT-storage\AACT\2026-04-12",
-    r"D:\AACT\2026-04-12",
-    r"C:\Users\user\AACT\2026-04-12",
-)
-
-
-def _discover_aact_root(cli_root: str | None) -> Path:
-    if cli_root:
-        return Path(cli_root)
-    env = os.environ.get("AACT_ROOT")
-    if env:
-        return Path(env)
-    for cand in _CANDIDATE_ROOTS:
-        p = Path(cand)
-        if (p / "studies.txt").exists():
-            return p
-    raise SystemExit(
-        "AACT root not found. Set --aact-root or AACT_ROOT env var. "
-        f"Searched: {_CANDIDATE_ROOTS}"
-    )
+from evidence_forecast._aact_paths import discover_root as _discover_aact_root
 
 
 def main() -> int:

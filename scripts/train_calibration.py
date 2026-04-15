@@ -1,9 +1,12 @@
 """Offline training driver for flip_forecaster_v1.pkl.
 
-Usage:
+Usage (paths are examples; prefer env vars or CLI, see
+evidence_forecast._aact_paths for AACT discovery):
+
+    export AACT_PATH="$AACT_SNAPSHOT/studies.txt"
     python scripts/train_calibration.py \\
-        --pairs C:/MetaAudit/outputs/pairs.csv \\
-        --aact C:/Users/user/AACT/2026-04-12/studies.txt \\
+        --pairs path/to/pairs.csv \\
+        --aact "$AACT_PATH" \\
         --out ./models
 """
 from __future__ import annotations
