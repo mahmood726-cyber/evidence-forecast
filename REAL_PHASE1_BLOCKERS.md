@@ -1,6 +1,6 @@
 # Real Phase-1 Blockers (investigated 2026-04-14)
 
-The plan at `C:\Users\user\docs\superpowers\plans\2026-04-14-evidence-forecast-plan.md` Task 17 assumed two data prereqs that on investigation don't exist on disk in the form the plan required. This file records what was found so the next session doesn't redo the investigation.
+The plan at `<user-docs>/superpowers/plans/2026-04-14-evidence-forecast-plan.md` Task 17 assumed two data prereqs that on investigation don't exist on disk in the form the plan required. This file records what was found so the next session doesn't redo the investigation.
 
 ## Blocker 1: CardioSynth has no Python API
 
@@ -43,7 +43,7 @@ No other candidate data sources found on disk:
 
 - Four-layer architecture, all modules unit-tested (58/58 tests passing).
 - TruthCert HMAC-SHA256 signing with env-var-only key, constant-time compare.
-- Pipeline-features family extracts Shannon entropy, design heterogeneity, Σ expected N from AACT fixture (canonical AACT snapshot at `C:\Users\user\AACT\2026-04-12\` is present and confirmed by `INDEX.md`).
+- Pipeline-features family extracts Shannon entropy, design heterogeneity, Σ expected N from AACT fixture (canonical AACT snapshot discovered via `evidence_forecast._aact_paths.discover_root()`; see `aact_storage_location` memory for the active location).
 - Dev-mode bootstrap produces three signed Forecast Cards for SGLT2i HFpEF, SUMMIT tirzepatide ACM, EMPA-REG T2DM anchored to published primary MAs.
 - JSON schema contract + module-boundary contract tests enforce MetaReproducer-P0-1-style field-name stability.
 

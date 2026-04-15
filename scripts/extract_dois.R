@@ -1,4 +1,8 @@
-files <- list.files("C:/Projects/Pairwise70/data",
+source(file.path(dirname(sys.frame(1)$ofile), "_pairwise70_paths.R"))
+DATA_DIR <- discover_pairwise70_root()
+OUT_DIR <- file.path(dirname(dirname(sys.frame(1)$ofile)), "cache")
+
+files <- list.files(DATA_DIR,
                     pattern = "^CD[0-9]+_pub[0-9]+_data\\.rda$", full.names = TRUE)
 doi_list <- character(0)
 for (f in files) {
@@ -12,7 +16,7 @@ for (f in files) {
   }
 }
 doi_list <- unique(doi_list)
-dir.create("C:/Models/EvidenceForecast/cache", recursive = TRUE, showWarnings = FALSE)
-writeLines(doi_list, "C:/Models/EvidenceForecast/cache/review_dois.txt")
+dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
+writeLines(doi_list, file.path(OUT_DIR, "review_dois.txt"))
 cat("unique DOIs:", length(doi_list), "\n")
 print(head(doi_list, 5))

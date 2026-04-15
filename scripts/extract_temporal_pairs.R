@@ -18,8 +18,12 @@ suppressPackageStartupMessages({
   library(metafor)
 })
 
-DATA_DIR <- "C:/Projects/Pairwise70/data"
-OUT <- "C:/Models/EvidenceForecast/tests/fixtures/temporal_cochrane_pairs_v0.csv"
+source(file.path(dirname(sys.frame(1)$ofile), "_pairwise70_paths.R"))
+DATA_DIR <- discover_pairwise70_root()
+OUT <- file.path(
+  dirname(dirname(sys.frame(1)$ofile)),
+  "tests", "fixtures", "temporal_cochrane_pairs_v0.csv"
+)
 
 pool_studies <- function(df) {
   ok_binary <- nrow(df) >= 2 &&

@@ -1,4 +1,7 @@
-load("C:/Projects/Pairwise70/data/CD001072_pub2_data.rda")
+source(file.path(dirname(sys.frame(1)$ofile), "_pairwise70_paths.R"))
+DATA_DIR <- discover_pairwise70_root()
+
+load(file.path(DATA_DIR, "CD001072_pub2_data.rda"))
 x <- get(ls()[1])
 cat("columns:", paste(colnames(x), collapse=","), "\n")
 cat("n_analyses:", length(unique(x$Analysis.number)), "\n")

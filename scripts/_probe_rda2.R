@@ -1,4 +1,7 @@
-files <- list.files("C:/Projects/Pairwise70/data", pattern = "\\.rda$", full.names = TRUE)
+source(file.path(dirname(sys.frame(1)$ofile), "_pairwise70_paths.R"))
+DATA_DIR <- discover_pairwise70_root()
+
+files <- list.files(DATA_DIR, pattern = "\\.rda$", full.names = TRUE)
 urls <- c()
 for (f in files[1:10]) {
   env <- new.env()
