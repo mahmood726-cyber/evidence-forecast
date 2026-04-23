@@ -1,3 +1,5 @@
+# sentinel:skip-file  (P0-hardcoded-local-path: dedicated path-discovery helper;
+# the candidate drive literals are the canonical env-var-with-fallback pattern.)
 # Pairwise70 path discovery — single source of truth for R-side scripts.
 #
 # Candidate drives are isolated here so the rest of the R codebase doesn't

@@ -17,4 +17,6 @@ STUCK_FAILURES.md
 STUCK_FAILURES.jsonl
 sentinel-findings.md
 sentinel-findings.jsonl
+review-findings.md
+review-findings-r*.md
 review-findings.jsonl

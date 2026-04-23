@@ -15,6 +15,7 @@ discovery is precisely what the rule *recommends* — the detector cannot tell
 the difference. Keep the candidate list short and update via session memory
 (``~/.claude/projects/.../memory/aact_storage_location.md``).
 """
+# sentinel:skip-file  (P0-hardcoded-local-path: see module docstring above)
 from __future__ import annotations
 
 import os
