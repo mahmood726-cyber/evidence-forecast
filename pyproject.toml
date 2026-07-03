@@ -6,7 +6,11 @@ requires-python = ">=3.13"
 dependencies = [
     "pandas>=2.2",
     "numpy>=1.26",
-    "scikit-learn>=1.5",
+    # Upper bound: models/flip_forecaster_v1.pkl is pickled under sklearn 1.7.x.
+    # sklearn >=1.8 unpickles it but fails inside predict_proba (removed private
+    # attrs); predict_flip surfaces a clear ModelVersionError in that case.
+    # Retrain via scripts/train_on_temporal_pairs.py to lift this bound.
+    "scikit-learn>=1.5,<1.8",
     "xgboost>=2.1",
     "pyyaml>=6.0",
     "jsonschema>=4.22",

@@ -71,6 +71,17 @@ python scripts/generate_trio_real_model.py
 python scripts/run_forecast.py --pico sglt2i_hfpef
 ```
 
+### scikit-learn version constraint
+
+`models/flip_forecaster_v1.pkl` is pickled under scikit-learn **1.7.x**. Under
+`scikit-learn >= 1.8` the estimators unpickle but `predict_proba` fails inside
+sklearn (removed private attributes). `predict_flip` detects this and raises a
+clear `evidence_forecast.flip_forecaster.ModelVersionError` (rather than an
+opaque `AttributeError`) telling you to either install a compatible sklearn or
+retrain via `python scripts/train_on_temporal_pairs.py`. `pyproject.toml` pins
+`scikit-learn>=1.5,<1.8` to keep the shipped model runnable out of the box;
+retraining regenerates the pickle and lets you lift the bound.
+
 ## Static vs dynamic components
 
 | Item | Source | Static / Dynamic |
