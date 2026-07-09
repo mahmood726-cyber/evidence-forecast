@@ -14,7 +14,7 @@ class RepresentativenessResult:
     overlap_score: float
     trial_country_count: int
     burden_weighted: bool
-    source: str  # "aact", "ctgov_fallback", "none"
+    source: str  # "registry_first", "aact", "ctgov_fallback", "none"
 
 
 def compute_representativeness(

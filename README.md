@@ -29,7 +29,7 @@ For any PICO, emits a **Forecast Card** — a cryptographically signed JSON + HT
 
 1. **Pairwise70 Zenodo DOI** — the substrate is an unpublished Hopewell et al. collection; a citable DOI for the analysed subset is needed before tier-1 venue submission.
 2. **TRIPOD+AI 2024 supplement** — mandatory for prediction-model papers at reputable methods venues; ~half-day standalone task.
-3. **Registry-first population weights** into `scripts/run_forecast.py::_load_weights` for non-zero representativeness scores. Integrates with the sister project `registry_first_rct_meta`.
+3. **Extend registry-first population weights beyond exact-match seed topics**. `scripts/run_forecast.py::_load_weights` now wires the exact-match `sglt2i_hfpef -> hfpef_sglt2` population run from the sister project `registry_first_rct_meta`; the other seed PICOs still fail closed until topic-aligned population outputs exist.
 4. **True Cochrane CDSR version-pair integration** — requires Wiley institutional API access; see `REAL_PHASE1_BLOCKERS.md` option 2.
 
 See `review-findings.md` for the 14 P0 / 14 P1 / 18 P2 multi-persona review and the resolution record.
