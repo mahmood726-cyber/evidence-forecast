@@ -132,3 +132,10 @@ Imports from (does not duplicate) CardioSynth, registry-first-rct-meta, Evidence
 Manuscript draft in `manuscript/main.md`. Target: Nature Medicine.
 
 Author: Mahmood Ahmad, Tahir Heart Institute (ORCID 0009-0003-7781-4478).
+
+## Certificate input validation
+
+TruthCert signing rejects non-finite numbers (`NaN` and infinity) and values
+that cannot be serialized as JSON. Verification returns `False` for malformed
+certificate fields or invalid payloads. A missing signing key still raises
+`TruthCertError`. Signatures over valid finite JSON retain their existing format.
