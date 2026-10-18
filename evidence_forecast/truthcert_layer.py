@@ -22,7 +22,11 @@ class TruthCertError(RuntimeError):
 
 
 def _canonical_json(obj: Any) -> str:
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    try:
+        return json.dumps(obj, sort_keys=True, separators=(",", ":"),
+                          ensure_ascii=False, allow_nan=False)
+    except (TypeError, ValueError) as exc:
+        raise TruthCertError("bundle must contain valid, finite JSON values") from exc
 
 
 def _get_key() -> bytes:
@@ -53,11 +57,23 @@ def sign_bundle(bundle: dict[str, Any]) -> dict[str, Any]:
 
 
 def verify_bundle(signed: dict[str, Any]) -> bool:
-    if "truthcert" not in signed:
+    if not isinstance(signed, dict) or "truthcert" not in signed:
         return False
     tc = signed["truthcert"]
+    if not isinstance(tc, dict):
+        return False
+    # Validate external certificate fields before constant-time comparison.
+    # compare_digest raises on non-string or non-ASCII inputs.
+    for field in ("sha256", "hmac_sha256"):
+        digest = tc.get(field)
+        if (not isinstance(digest, str) or len(digest) != 64
+                or any(char not in "0123456789abcdef" for char in digest)):
+            return False
     payload_bundle = {k: v for k, v in signed.items() if k != "truthcert"}
-    payload = _canonical_json(payload_bundle)
+    try:
+        payload = _canonical_json(payload_bundle)
+    except TruthCertError:
+        return False
     key = _get_key()
     expected_mac = hmac.new(key, payload.encode("utf-8"), hashlib.sha256).hexdigest()
     expected_sha = hashlib.sha256(payload.encode("utf-8")).hexdigest()
